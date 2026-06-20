@@ -307,6 +307,7 @@
       letter-spacing: 0;
     }
     .key.wide { flex: 1.6; max-width: 66px; font-size: 0.65rem; }
+    .key.space { flex: 0 1 240px; max-width: 240px; font-size: 0.65rem; letter-spacing: 2px; }
     .key:active { filter: brightness(1.2); }
 
     .key.correct { background: var(--correct); border-color: var(--correct); color: #0d0c08; }
@@ -802,6 +803,7 @@
   <div class="key-row" id="row1"></div>
   <div class="key-row" id="row2"></div>
   <div class="key-row" id="row3"></div>
+  <div class="key-row" id="row4"></div>
 </div>
 
 <footer>
@@ -1372,6 +1374,7 @@ const ROWS = [
   ['Q','W','E','R','T','Y','U','I','O','P'],
   ['A','S','D','F','G','H','J','K','L'],
   ['ENTER','Z','X','C','V','B','N','M','⌫'],
+  ['SPACE'],
 ];
 
 function buildKeyboard() {
@@ -1380,8 +1383,9 @@ function buildKeyboard() {
     row.innerHTML = '';
     keys.forEach(k => {
       const btn = document.createElement('button');
-      btn.className = 'key' + (k.length > 1 ? ' wide' : '');
-      btn.textContent = k;
+      btn.className = 'key' +
+        (k === 'SPACE' ? ' space' : (k.length > 1 ? ' wide' : ''));
+      btn.textContent = k === 'SPACE' ? 'SPACE' : k;
       btn.dataset.k = k;
       btn.addEventListener('click', () => handleKey(k));
       row.appendChild(btn);
@@ -1448,6 +1452,14 @@ function handleKey(k) {
 
   if (k === 'ENTER' || k === 'Enter') {
     submitGuess();
+    return;
+  }
+
+  if (k === 'SPACE' || k === ' ') {
+    if (G.current.length < G.len) {
+      G.current.push(' ');
+      updateCurrentRow();
+    }
     return;
   }
 
@@ -1653,6 +1665,7 @@ function boot() {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'Backspace') { handleKey('Backspace'); e.preventDefault(); }
     else if (e.key === 'Enter') { handleKey('Enter'); }
+    else if (e.key === ' ') { handleKey('SPACE'); e.preventDefault(); }
     else if (/^[a-zA-Z]$/.test(e.key)) { handleKey(e.key.toUpperCase()); }
   });
 
