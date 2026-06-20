@@ -1634,9 +1634,17 @@ function shareResults() {
         r === 'correct' ? '🟩' : r === 'present' ? '🟨' : '⬛'
       ).join('')
     ),
-    '',
-    'https://wordlescape.lol',
   ];
+
+  // Note any helpers the player leaned on, matching the end-screen badges.
+  const helpers = [];
+  if (G.usedGnome) helpers.push('🧙 Used Saggderf');
+  if (G.usedHint)  helpers.push('💡 Used category hint');
+  if (helpers.length) {
+    lines.push('', ...helpers);
+  }
+
+  lines.push('', 'https://wordlescape.lol');
   const text = lines.join('\n');
 
   if (navigator.clipboard?.writeText) {
