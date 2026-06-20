@@ -1,0 +1,10 @@
+{
+  "name": "wordlescape",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wordlescape — a daily OSRS-themed Wordle with a gnome hint assistant.",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.105.0"
+  }
+}
