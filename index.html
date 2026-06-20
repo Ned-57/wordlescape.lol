@@ -7,7 +7,7 @@
   <meta name="description" content="A daily Wordle game with Old School RuneScape words. New word every day!">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,8 +20,8 @@
       --gold-dim:    #8b7234;
       --text:        #f0dfa0;
       --text-dim:    #9a8860;
-      --correct:     #c8a951;
-      --present:     #b05318;
+      --correct:     #6aaa64;
+      --present:     #c9b458;
       --absent:      #36322a;
       --absent-text: #605848;
       --key-bg:      #28220f;
@@ -256,7 +256,7 @@
     .tile.flip { animation: flip 0.18s ease; }
 
     .tile.correct { background: var(--correct); border-color: var(--correct); color: #0d0c08; }
-    .tile.present { background: var(--present); border-color: var(--present); color: var(--text); }
+    .tile.present { background: var(--present); border-color: var(--present); color: #0d0c08; }
     .tile.absent  { background: var(--absent);  border-color: var(--absent);  color: var(--absent-text); }
 
     @keyframes pop  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
@@ -310,7 +310,7 @@
     .key:active { filter: brightness(1.2); }
 
     .key.correct { background: var(--correct); border-color: var(--correct); color: #0d0c08; }
-    .key.present { background: var(--present); border-color: var(--present); color: var(--text); }
+    .key.present { background: var(--present); border-color: var(--present); color: #0d0c08; }
     .key.absent  { background: var(--absent);  border-color: var(--absent);  color: var(--absent-text); }
 
     /* ── Modal overlay ── */
@@ -370,7 +370,7 @@
       font-size: 1rem; font-weight: 700;
     }
     .h-tile.correct { background: var(--correct); border-color: var(--correct); color: #0d0c08; }
-    .h-tile.present { background: var(--present); border-color: var(--present); }
+    .h-tile.present { background: var(--present); border-color: var(--present); color: #0d0c08; }
     .h-tile.absent  { background: var(--absent);  border-color: var(--absent); color: var(--absent-text); }
 
     .help-body { font-size: 0.78rem; color: var(--text-dim); line-height: 1.55; margin: 6px 0; }
@@ -458,6 +458,316 @@
       .key { max-width: 36px; height: 50px; }
       .key.wide { max-width: 56px; }
     }
+
+    /* ── Footer / Donate ── */
+    footer {
+      width: 100%;
+      max-width: 520px;
+      margin-top: auto;
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .donate-note {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .donate-btn {
+      display: inline-block;
+      padding: 9px 20px;
+      background: var(--gold);
+      color: #0d0c08;
+      border-radius: 5px;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: background 0.15s;
+    }
+    .donate-btn:hover { background: #d4b866; }
+
+    .copyright {
+      margin-top: 14px;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Gnome Hint Chat ── */
+    #gnome-launcher {
+      position: fixed;
+      left: 18px;
+      bottom: 22px;
+      z-index: 60;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: radial-gradient(circle at 50% 35%, var(--surface2), var(--surface));
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.55), 0 0 0 4px rgba(13,12,8,0.6);
+      transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+      animation: gnomeBob 3.4s ease-in-out infinite;
+    }
+    #gnome-launcher:hover {
+      transform: scale(1.08);
+      border-color: var(--gold);
+      box-shadow: 0 8px 26px rgba(0,0,0,0.6), 0 0 18px rgba(200,169,81,0.35);
+    }
+    #gnome-launcher img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: 50% 30%;
+      display: block;
+    }
+    @keyframes gnomeBob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    /* ── Occasional gnome speech popup ──
+       Redesigned as a standalone circular gnome portrait beside a wooden-framed
+       sign/plaque, OSRS-style. Appears now and then during play, never
+       permanently. The container itself is just a transparent flex row. */
+    #gnome-toast {
+      position: fixed;
+      left: 18px;
+      bottom: 98px;
+      z-index: 62;
+      width: max-content;
+      max-width: min(360px, calc(100vw - 36px));
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+    #gnome-toast.hidden { display: none; }
+    #gnome-toast.show { animation: toastIn 0.5s cubic-bezier(.18,.89,.32,1.28) both; }
+    #gnome-toast.out  { animation: toastOut 0.28s ease forwards; }
+
+    /* Wooden sign/plaque: wood-grain frame, inset dark line,
+       and a dark-brown inner panel with an inner vignette. */
+    #gnome-toast .gnome-toast-plaque {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      padding: 13px 20px;
+      border: 6px solid #6b4a28;
+      border-image: linear-gradient(135deg,
+        #a06f3f 0%, #5e3f22 26%, #835a32 50%, #4a3119 74%, #8a5d33 100%) 1;
+      background: linear-gradient(180deg, #3b2a18 0%, #2b1d10 60%, #241810 100%);
+      box-shadow:
+        inset 0 0 0 2px rgba(20,12,6,0.9),     /* thin dark inner border line */
+        inset 0 0 16px rgba(0,0,0,0.78),        /* inner vignette */
+        0 10px 26px rgba(0,0,0,0.55);           /* drop shadow */
+    }
+
+    #gnome-toast .gnome-toast-text {
+      font-family: 'Oswald', 'Cinzel', sans-serif;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 0.92rem;
+      line-height: 1.28;
+      letter-spacing: 0.05em;
+      color: #f5ead0;
+      /* Subtle dark outline + drop for retro readability. */
+      text-shadow:
+        -1px -1px 0 #281909,
+         1px -1px 0 #281909,
+        -1px  1px 0 #281909,
+         1px  1px 0 #281909,
+         0 2px 4px rgba(0,0,0,0.6);
+    }
+    @keyframes toastIn {
+      0%   { opacity: 0; transform: translateY(16px) scale(0.9); }
+      60%  { opacity: 1; transform: translateY(-3px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes toastOut {
+      0%   { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(10px) scale(0.94); }
+    }
+
+    /* Modern, lightweight chat panel that matches the site's dark gold theme. */
+    #gnome-panel {
+      position: fixed;
+      left: 18px;
+      bottom: 96px;
+      z-index: 61;
+      width: min(370px, calc(100vw - 36px));
+      height: min(520px, calc(100vh - 140px));
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 44px rgba(0,0,0,0.6);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: bottom left;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    #gnome-panel.hidden {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+      pointer-events: none;
+    }
+
+    .gnome-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--surface2) 0%, transparent 100%);
+    }
+    .gnome-head .gnome-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .gnome-head .gnome-avatar img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: 50% 28%;
+      display: block;
+    }
+    .gnome-head .gnome-titles { flex: 1; min-width: 0; }
+    .gnome-head h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.98rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+    .gnome-head p {
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+    .gnome-head .modal-close {
+      position: static;
+      color: var(--text-dim);
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .gnome-head .modal-close:hover { color: var(--gold); }
+
+    #gnome-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      user-select: text;
+    }
+
+    .gnome-msg {
+      max-width: 88%;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    /* Player lines: a gold slip on the right. */
+    .gnome-msg.user {
+      align-self: flex-end;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+      color: #1a1505;
+      font-weight: 600;
+      border-bottom-right-radius: 4px;
+    }
+    /* Gnome lines: a clean dark bubble on the left, name in gold. */
+    .gnome-msg.bot {
+      align-self: flex-start;
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .gnome-msg.bot .gnome-name {
+      display: block;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.66rem;
+      color: var(--gold);
+      letter-spacing: 0.8px;
+      margin-bottom: 3px;
+    }
+    .gnome-msg.bot .gnome-body { display: block; }
+    .gnome-msg.bot em { font-style: italic; color: var(--gold); }
+    .gnome-msg .gnome-cursor {
+      display: inline-block;
+      width: 7px;
+      background: var(--gold);
+      animation: gnomeBlink 1s steps(2) infinite;
+    }
+    @keyframes gnomeBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .gnome-form {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      border-top: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    #gnome-input {
+      flex: 1;
+      resize: none;
+      max-height: 110px;
+      min-height: 42px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      padding: 10px;
+      line-height: 1.4;
+      user-select: text;
+    }
+    #gnome-input:focus { outline: none; border-color: var(--gold); }
+    #gnome-input::placeholder { color: var(--text-dim); }
+
+    #gnome-send {
+      flex-shrink: 0;
+      width: 46px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+      border: none;
+      border-radius: 10px;
+      color: #1a1505;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: filter 0.15s;
+    }
+    #gnome-send:hover:not(:disabled) { filter: brightness(1.12); }
+    #gnome-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    @media (max-width: 420px) {
+      #gnome-launcher { width: 56px; height: 56px; left: 12px; bottom: 14px; }
+      #gnome-panel { left: 12px; bottom: 78px; }
+      #gnome-toast { left: 12px; bottom: 78px; max-width: calc(100vw - 24px); gap: 10px; }
+      #gnome-toast .gnome-toast-plaque { padding: 10px 14px; border-width: 5px; }
+      #gnome-toast .gnome-toast-text { font-size: 0.8rem; letter-spacing: 0.04em; }
+    }
   </style>
 </head>
 <body>
@@ -478,7 +788,7 @@
 </header>
 
 <div class="header-subbtns">
-    <button class="icon-btn hidden" id="category-btn" title="Show today's category hint">Category Hint</button>
+    <button class="icon-btn" id="category-btn" title="Show today's category hint">Category Hint</button>
     <button class="icon-btn" id="categories-btn" title="Show all possible categories">All Possible Categories</button>
 </div>
 
@@ -494,6 +804,17 @@
   <div class="key-row" id="row3"></div>
 </div>
 
+<footer>
+  <p class="donate-note">
+    Enjoying Wordlescape? It's free and made for fun.<br>
+    If you'd like to support it, a small PayPal donation is always appreciated — no pressure!
+  </p>
+  <a class="donate-btn"
+     href="https://www.paypal.com/donate?business=nedtelfer@yahoo.com&item_name=Wordlescape+Donation"
+     target="_blank" rel="noopener noreferrer">Donate via PayPal ⚔</a>
+  <p class="copyright">© 2026 Wordlescape. All rights reserved. Not affiliated with Jagex or Old School RuneScape.</p>
+</footer>
+
 <!-- Help Modal -->
 <div class="overlay hidden" id="help-ov">
   <div class="modal">
@@ -508,12 +829,12 @@
     <div class="help-row">
       <div class="h-tile correct">B</div><div class="h-tile">O</div><div class="h-tile">N</div><div class="h-tile">E</div><div class="h-tile">S</div>
     </div>
-    <p class="help-body"><span style="color:var(--gold)">■ Gold</span> — correct letter, correct position.</p>
+    <p class="help-body"><span style="color:var(--correct)">■ Green</span> — correct letter, correct position.</p>
 
     <div class="help-row">
       <div class="h-tile">B</div><div class="h-tile present">O</div><div class="h-tile">N</div><div class="h-tile">E</div><div class="h-tile">S</div>
     </div>
-    <p class="help-body"><span style="color:var(--present)">■ Rust</span> — letter is in the word, but wrong position.</p>
+    <p class="help-body"><span style="color:var(--present)">■ Yellow</span> — letter is in the word, but wrong position.</p>
 
     <div class="help-row">
       <div class="h-tile">B</div><div class="h-tile">O</div><div class="h-tile absent">N</div><div class="h-tile">E</div><div class="h-tile">S</div>
@@ -530,6 +851,9 @@
   <div class="modal">
 <button class="modal-close hidden" id="category-x">✕</button>
 <img id="category-img" class="category-hint-img" src="" alt="Category hint image">
+<div class="category-hint-footer">
+  <p id="category-name" class="category-hint-title"></p>
+</div>
   </div>
 </div>
 
@@ -563,6 +887,34 @@
     <button class="modal-close" id="stats-x">✕</button>
     <div class="stats-row" id="stats-boxes"></div>
   </div>
+</div>
+
+<!-- Gnome Hint Chat -->
+<div id="gnome-toast" class="hidden" role="status" aria-live="polite">
+  <div class="gnome-toast-plaque">
+    <span class="gnome-toast-text" id="gnome-toast-text"></span>
+  </div>
+</div>
+<button id="gnome-launcher" title="Ask the Gnome for a hint" aria-label="Open the Gnome hint chat">
+  <img src="/icons/gnome.png" alt="" aria-hidden="true" />
+</button>
+
+<div id="gnome-panel" class="hidden" role="dialog" aria-label="Gnome hint chat">
+  <div class="gnome-head">
+    <div class="gnome-avatar">
+      <img src="/icons/gnome.png" alt="" aria-hidden="true" />
+    </div>
+    <div class="gnome-titles">
+      <h2>The Gnome</h2>
+      <p>Keeper of riddles &amp; hints</p>
+    </div>
+    <button class="modal-close" id="gnome-close" aria-label="Close chat">✕</button>
+  </div>
+  <div id="gnome-messages"></div>
+  <form class="gnome-form" id="gnome-form">
+    <textarea id="gnome-input" rows="1" placeholder="Ask the gnome for a hint…" autocomplete="off"></textarea>
+    <button type="submit" id="gnome-send" title="Send" aria-label="Send message">➤</button>
+  </form>
 </div>
 
 <script>
@@ -778,10 +1130,12 @@ function getTodaysCategoryName() {
 function showTodaysCategory() {
   const name = getTodaysCategoryName();
   const img = document.getElementById('category-img');
+  const label = document.getElementById('category-name');
   const ov = document.getElementById('category-ov');
 
   img.src = getCategoryHintImageUrl();
   img.alt = `${name} hint`;
+  if (label) label.textContent = name;
   ov.classList.remove('hidden');
 }
 
@@ -796,11 +1150,8 @@ function showAllCategories() {
 function updateCategoryButtonVisibility() {
   const btn = document.getElementById('category-btn');
   if (!btn) return;
-  if (G.guesses.length >= 3) {
-    btn.classList.remove('hidden');
-  } else {
-    btn.classList.add('hidden');
-  }
+  // Category hint button is always available.
+  btn.classList.remove('hidden');
 }
 
 //Math.floor function round down to nearest whole number
@@ -1140,6 +1491,7 @@ function submitGuess() {
       setTimeout(() => openEndModal(false), 400);
     } else {
       persist();
+      if (window.gnomeComment) window.gnomeComment('wrong');
     }
   }, revealMs);
 }
@@ -1226,7 +1578,7 @@ function shareResults() {
     '',
     ...G.guesses.map(guess =>
       evaluate(guess, G.word).map(r =>
-        r === 'correct' ? '🟩' : r === 'present' ? '🟧' : '⬛'
+        r === 'correct' ? '🟩' : r === 'present' ? '🟨' : '⬛'
       ).join('')
     ),
     '',
@@ -1333,6 +1685,236 @@ function boot() {
 }
 
 boot();
+
+// ────────────────────────────────────────────────
+// GNOME HINT CHAT
+// ────────────────────────────────────────────────
+(function gnomeChat() {
+  const launcher = document.getElementById('gnome-launcher');
+  const panel    = document.getElementById('gnome-panel');
+  const closeBtn = document.getElementById('gnome-close');
+  const msgArea  = document.getElementById('gnome-messages');
+  const form     = document.getElementById('gnome-form');
+  const input    = document.getElementById('gnome-input');
+  const sendBtn  = document.getElementById('gnome-send');
+  const toast     = document.getElementById('gnome-toast');
+  const toastText = document.getElementById('gnome-toast-text');
+
+  // Short, witty, OSRS-style lines for the occasional speech popup.
+  const IDLE_LINES = [
+    "Psst! I've deduced the correct letters already.",
+    "Over here, human! The letters practically solve themselves.",
+    "Ah-ha! Come see, I've uncovered a clever clue.",
+    "I've spotted a remarkably suspicious vowel, you know.",
+    "Quietly now, the answer grows clearer by the minute.",
+    "Stuck, are we? A gnome is never short of a riddle.",
+    "Come along, tall one. Ask, and I shall nudge.",
+    "The canopy whispers, and I happen to be listening.",
+  ];
+  const WRONG_LINES = [
+    "Bold guess, human. Bold, and wholly incorrect.",
+    "Warmer, perhaps. Or colder. Do ask me properly.",
+    "A valiant attempt. A gnome would have done better.",
+    "Not quite, my good fellow. Mind that vowel.",
+  ];
+
+  // Occasional popups: schedule, show, and tidy away with animation.
+  let toastTimer = null;
+  let idleTimer  = null;
+  function pickLine(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function hideToast() {
+    if (!toast || toast.classList.contains('hidden')) return;
+    toast.classList.remove('show');
+    toast.classList.add('out');
+    setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('out'); }, 280);
+  }
+
+  function showToast(message, holdMs) {
+    if (!toast) return;
+    // Never speak over an open chat.
+    if (!panel.classList.contains('hidden')) return;
+    clearTimeout(toastTimer);
+    toastText.textContent = message;
+    toast.classList.remove('hidden', 'out', 'show');
+    void toast.offsetWidth; // restart the entrance animation
+    toast.classList.add('show');
+    toastTimer = setTimeout(hideToast, holdMs || 6000);
+  }
+
+  // Keep idle popups appearing now and then while the chat stays closed.
+  function scheduleIdle() {
+    clearTimeout(idleTimer);
+    const delay = 24000 + Math.random() * 22000; // roughly every 24s-46s
+    idleTimer = setTimeout(() => {
+      if (panel.classList.contains('hidden')) showToast(pickLine(IDLE_LINES));
+      scheduleIdle();
+    }, delay);
+  }
+
+  // Let the game nudge the gnome to comment on play (see submitGuess).
+  window.gnomeComment = function (kind) {
+    if (kind === 'wrong' && Math.random() < 0.5) showToast(pickLine(WRONG_LINES), 5000);
+  };
+
+  // A first friendly popup shortly after load, then occasional ones.
+  setTimeout(() => { if (panel.classList.contains('hidden')) showToast(pickLine(IDLE_LINES)); }, 4500);
+  scheduleIdle();
+
+  // Conversation history in OpenAI-style chat format.
+  const history = [];
+  let streaming = false;
+  let greeted   = false;
+
+  const GREETING = "Oh, splendid! Another human folk bumbling through the canopy without a clue. Fear not, ask away, and I shall dispense a riddle or two. The answer itself, however, stays firmly up my *sleeve*.";
+
+  function scrollDown() { msgArea.scrollTop = msgArea.scrollHeight; }
+
+  // Render a tiny, safe subset of markdown: *text* becomes italic <em>.
+  // Everything else is escaped so the chat can never inject raw HTML.
+  function renderMarkdown(text) {
+    const escaped = text.replace(/[&<>]/g, ch => (
+      ch === '&' ? '&amp;' : ch === '<' ? '&lt;' : '&gt;'
+    ));
+    // Match *...* pairs that wrap non-empty, non-space-bounded content.
+    return escaped.replace(/\*(?!\s)([^*]+?)(?<!\s)\*/g, '<em>$1</em>');
+  }
+
+  function setBotText(el, text) {
+    el.innerHTML = renderMarkdown(text);
+  }
+
+  function addMessage(role, text) {
+    const el = document.createElement('div');
+    el.className = 'gnome-msg ' + (role === 'user' ? 'user' : 'bot');
+    if (role === 'user') {
+      el.textContent = text;
+    } else {
+      el.innerHTML = '<span class="gnome-name">The Gnome</span>';
+      const body = document.createElement('span');
+      body.className = 'gnome-body';
+      setBotText(body, text);
+      el.appendChild(body);
+    }
+    msgArea.appendChild(el);
+    scrollDown();
+    return el;
+  }
+
+  function openPanel() {
+    panel.classList.remove('hidden');
+    hideToast();
+    if (!greeted) { addMessage('bot', GREETING); greeted = true; }
+    setTimeout(() => input.focus(), 180);
+  }
+  function closePanel() { panel.classList.add('hidden'); }
+
+  launcher.addEventListener('click', () => {
+    panel.classList.contains('hidden') ? openPanel() : closePanel();
+  });
+  if (toast) toast.addEventListener('click', openPanel);
+  closeBtn.addEventListener('click', closePanel);
+
+  // Auto-grow the textarea.
+  function autoGrow() {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 110) + 'px';
+  }
+  input.addEventListener('input', autoGrow);
+
+  // Keep the game's global keydown handler from catching chat typing.
+  input.addEventListener('keydown', e => {
+    e.stopPropagation();
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
+  async function sendMessage(text) {
+    streaming = true;
+    sendBtn.disabled = true;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    const botEl = addMessage('bot', '');
+    const body = botEl.querySelector('.gnome-body');
+    const cursor = document.createElement('span');
+    cursor.className = 'gnome-cursor';
+    cursor.innerHTML = '&nbsp;';
+    body.appendChild(cursor);
+
+    let answer = '';
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: history.slice(-20),
+          puzzle: {
+            answer: G.word,
+            category: getTodaysCategoryName(),
+            hint: G.hint,
+          },
+        }),
+      });
+
+      if (!res.ok || !res.body) throw new Error('Request failed');
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith('data:')) continue;
+          const payload = trimmed.slice(5).trim();
+          if (payload === '[DONE]' || payload === '') continue;
+          try {
+            const data = JSON.parse(payload);
+            if (data.error) throw new Error(data.error);
+            if (data.text) {
+              answer += data.text;
+              setBotText(body, answer);
+              body.appendChild(cursor);
+              scrollDown();
+            }
+          } catch { /* ignore malformed chunk */ }
+        }
+      }
+    } catch (err) {
+      if (!answer) answer = "Bah! My gnomish memory failed me, try asking again, adventurer.";
+      setBotText(body, answer);
+    } finally {
+      cursor.remove();
+      setBotText(body, answer || "…");
+      if (answer) history.push({ role: 'assistant', content: answer });
+      streaming = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (streaming) return;
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    autoGrow();
+    sendMessage(text);
+  });
+})();
 </script>
 </body>
 </html>
