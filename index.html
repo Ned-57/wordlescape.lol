@@ -401,6 +401,28 @@
       margin-bottom: 8px;
       color: var(--text-dim);
     }
+    #end-helpers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    #end-helpers:empty { display: none; }
+    .helper-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(200, 169, 81, 0.08);
+      color: var(--text);
+      padding: 4px 11px;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .helper-badge.clean { color: var(--gold); border-color: var(--gold-dim); }
     #end-grid {
       display: flex;
       flex-direction: column;
@@ -537,8 +559,9 @@
     }
 
     /* ── Occasional gnome speech popup ──
-       Redesigned as a standalone circular gnome portrait beside a wooden-framed
-       sign/plaque, OSRS-style. Appears now and then during play, never
+       Styled to match the site's dark-gold theme, like the Category Hint
+       and All Possible Categories buttons: a clean surface panel with a
+       gold-tinted border. Appears now and then during play, never
        permanently. The container itself is just a transparent flex row. */
     #gnome-toast {
       position: fixed;
@@ -556,38 +579,35 @@
     #gnome-toast.show { animation: toastIn 0.5s cubic-bezier(.18,.89,.32,1.28) both; }
     #gnome-toast.out  { animation: toastOut 0.28s ease forwards; }
 
-    /* Wooden sign/plaque: wood-grain frame, inset dark line,
-       and a dark-brown inner panel with an inner vignette. */
+    /* Theme-matched plaque: surface background, gold-tinted border,
+       rounded corners — the same visual language as the category buttons. */
     #gnome-toast .gnome-toast-plaque {
       position: relative;
       flex: 1;
       min-width: 0;
-      padding: 13px 20px;
-      border: 6px solid #6b4a28;
-      border-image: linear-gradient(135deg,
-        #a06f3f 0%, #5e3f22 26%, #835a32 50%, #4a3119 74%, #8a5d33 100%) 1;
-      background: linear-gradient(180deg, #3b2a18 0%, #2b1d10 60%, #241810 100%);
-      box-shadow:
-        inset 0 0 0 2px rgba(20,12,6,0.9),     /* thin dark inner border line */
-        inset 0 0 16px rgba(0,0,0,0.78),        /* inner vignette */
-        0 10px 26px rgba(0,0,0,0.55);           /* drop shadow */
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+    }
+
+    #gnome-toast .gnome-toast-name {
+      display: block;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.66rem;
+      color: var(--gold);
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
     }
 
     #gnome-toast .gnome-toast-text {
-      font-family: 'Oswald', 'Cinzel', sans-serif;
-      text-transform: uppercase;
-      font-weight: 700;
-      font-size: 0.92rem;
-      line-height: 1.28;
-      letter-spacing: 0.05em;
-      color: #f5ead0;
-      /* Subtle dark outline + drop for retro readability. */
-      text-shadow:
-        -1px -1px 0 #281909,
-         1px -1px 0 #281909,
-        -1px  1px 0 #281909,
-         1px  1px 0 #281909,
-         0 2px 4px rgba(0,0,0,0.6);
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: var(--text);
     }
     @keyframes toastIn {
       0%   { opacity: 0; transform: translateY(16px) scale(0.9); }
@@ -766,8 +786,8 @@
       #gnome-launcher { width: 56px; height: 56px; left: 12px; bottom: 14px; }
       #gnome-panel { left: 12px; bottom: 78px; }
       #gnome-toast { left: 12px; bottom: 78px; max-width: calc(100vw - 24px); gap: 10px; }
-      #gnome-toast .gnome-toast-plaque { padding: 10px 14px; border-width: 5px; }
-      #gnome-toast .gnome-toast-text { font-size: 0.8rem; letter-spacing: 0.04em; }
+      #gnome-toast .gnome-toast-plaque { padding: 10px 14px; }
+      #gnome-toast .gnome-toast-text { font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -844,6 +864,7 @@
     <p class="help-body"><span style="color:var(--absent-text)">■ Dark</span> — letter is not in the word.</p>
 
     <hr class="rune">
+    <p class="help-body">Try not to lean on any hints or Saggderf the gnome helper — see if you can crack the word on your own. But they're there for you if you ever find yourself in a pickle.</p>
     <p class="help-body">A new word drops every day at midnight. All answers are Old School RuneScape terms — skills, bosses, items, locations, and more. Good luck, adventurer!</p>
   </div>
 </div>
@@ -876,6 +897,7 @@
     <div id="end-answer"></div>
     <div id="end-hint"></div>
     <div id="end-result"></div>
+    <div id="end-helpers"></div>
     <div id="end-grid"></div>
     <button class="share-btn" id="share-btn">Copy Results ⚔</button>
     <p id="next-info"></p>
@@ -894,27 +916,28 @@
 <!-- Gnome Hint Chat -->
 <div id="gnome-toast" class="hidden" role="status" aria-live="polite">
   <div class="gnome-toast-plaque">
+    <span class="gnome-toast-name">Saggderf</span>
     <span class="gnome-toast-text" id="gnome-toast-text"></span>
   </div>
 </div>
-<button id="gnome-launcher" title="Ask the Gnome for a hint" aria-label="Open the Gnome hint chat">
+<button id="gnome-launcher" title="Ask Saggderf for a hint" aria-label="Open Saggderf's hint chat">
   <img src="/icons/gnome.png" alt="" aria-hidden="true" />
 </button>
 
-<div id="gnome-panel" class="hidden" role="dialog" aria-label="Gnome hint chat">
+<div id="gnome-panel" class="hidden" role="dialog" aria-label="Saggderf hint chat">
   <div class="gnome-head">
     <div class="gnome-avatar">
       <img src="/icons/gnome.png" alt="" aria-hidden="true" />
     </div>
     <div class="gnome-titles">
-      <h2>The Gnome</h2>
+      <h2>Saggderf</h2>
       <p>Keeper of riddles &amp; hints</p>
     </div>
     <button class="modal-close" id="gnome-close" aria-label="Close chat">✕</button>
   </div>
   <div id="gnome-messages"></div>
   <form class="gnome-form" id="gnome-form">
-    <textarea id="gnome-input" rows="1" placeholder="Ask the gnome for a hint…" autocomplete="off"></textarea>
+    <textarea id="gnome-input" rows="1" placeholder="Ask Saggderf for a hint…" autocomplete="off"></textarea>
     <button type="submit" id="gnome-send" title="Send" aria-label="Send message">➤</button>
   </form>
 </div>
@@ -1139,6 +1162,9 @@ function showTodaysCategory() {
   img.alt = `${name} hint`;
   if (label) label.textContent = name;
   ov.classList.remove('hidden');
+
+  // Record that the player leaned on the category hint.
+  if (G && !G.usedHint) { G.usedHint = true; persist(); }
 }
 
 function showAllCategories() {
@@ -1223,6 +1249,8 @@ function initGame() {
     current:  [],
     over:     false,
     won:      false,
+    usedGnome: false,
+    usedHint:  false,
   };
 
   // Try restoring today's state
@@ -1234,6 +1262,8 @@ function initGame() {
         G.guesses = s.guesses || [];
         G.over    = s.over    || false;
         G.won     = s.won     || false;
+        G.usedGnome = s.usedGnome || false;
+        G.usedHint  = s.usedHint  || false;
       }
     }
   } catch {}
@@ -1245,6 +1275,8 @@ function persist() {
     guesses: G.guesses,
     over:    G.over,
     won:     G.won,
+    usedGnome: G.usedGnome,
+    usedHint:  G.usedHint,
   }));
 }
 
@@ -1544,6 +1576,15 @@ function openEndModal(won) {
     ? `Solved in ${G.guesses.length} / ${G.maxG} guesses`
     : `The word was above — better luck tomorrow!`;
 
+  // Show which helpers (if any) the player leaned on this round.
+  const helpers = document.getElementById('end-helpers');
+  const badges = [];
+  if (G.usedGnome) badges.push('🧙 Used Saggderf');
+  if (G.usedHint)  badges.push('💡 Used category hint');
+  helpers.innerHTML = badges.length
+    ? badges.map(b => `<span class="helper-badge">${b}</span>`).join('')
+    : '<span class="helper-badge clean">⚔ No helpers used</span>';
+
   // Mini guess grid
   const grid = document.getElementById('end-grid');
   grid.innerHTML = '';
@@ -1594,7 +1635,7 @@ function shareResults() {
       ).join('')
     ),
     '',
-    'nedtelfer.com/wordlescape',
+    'https://wordlescape.lol',
   ];
   const text = lines.join('\n');
 
@@ -1679,6 +1720,9 @@ function boot() {
   document.getElementById('help-btn').addEventListener('click', () => helpOv.classList.remove('hidden'));
   document.getElementById('help-x').addEventListener('click',   () => helpOv.classList.add('hidden'));
   helpOv.addEventListener('click', e => { if (e.target === helpOv) helpOv.classList.add('hidden'); });
+
+  // Show the rules automatically when the page opens
+  helpOv.classList.remove('hidden');
 
   document.getElementById('category-btn').addEventListener('click', showTodaysCategory);
   document.getElementById('categories-btn').addEventListener('click', showAllCategories);
@@ -1803,7 +1847,7 @@ boot();
     if (role === 'user') {
       el.textContent = text;
     } else {
-      el.innerHTML = '<span class="gnome-name">The Gnome</span>';
+      el.innerHTML = '<span class="gnome-name">Saggderf</span>';
       const body = document.createElement('span');
       body.className = 'gnome-body';
       setBotText(body, text);
@@ -1847,6 +1891,9 @@ boot();
   async function sendMessage(text) {
     streaming = true;
     sendBtn.disabled = true;
+
+    // Record that the player called on Saggderf for help.
+    if (typeof G === 'object' && G && !G.usedGnome) { G.usedGnome = true; persist(); }
 
     addMessage('user', text);
     history.push({ role: 'user', content: text });
